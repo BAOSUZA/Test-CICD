@@ -1,11 +1,7 @@
-name: React CI/CD
+name: Production CI/CD
 
 on:
   push:
-    branches:
-      - main
-
-  pull_request:
     branches:
       - main
 
@@ -16,7 +12,7 @@ permissions:
 
 jobs:
   build:
-    name: Build React
+    name: Build Production
     runs-on: ubuntu-latest
 
     steps:
@@ -32,25 +28,24 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build
+      - name: Build Production
         run: npm run build
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
-      - name: Upload build
+      - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./dist
 
   deploy:
-    name: Deploy to GitHub Pages
+    name: Deploy Production
     needs: build
-    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
 
     environment:
-      name: github-pages
+      name: production
       url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
